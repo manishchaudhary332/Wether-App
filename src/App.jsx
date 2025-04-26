@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Weather from "./Weather";
+import "animate.css";
 
 function App() {
   const [city, setCity] = useState("");
@@ -18,26 +19,31 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-blue-300 to-blue-500 p-6">
-      <h1 className="text-4xl font-bold text-white mb-8 drop-shadow-md">Weather App</h1>
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-indigo-500 to-blue-600 p-8 transition-all duration-500 ease-in-out">
+      <h1 className="text-5xl font-semibold text-white mb-8 drop-shadow-lg animate__animated animate__fadeIn animate__delay-1s">
+        Weather App
+      </h1>
 
-      <div className="flex gap-3 mb-8">
+      <div className="flex gap-4 mb-6 max-w-lg w-full">
         <input
           type="text"
           value={city}
           onChange={(e) => setCity(e.target.value)}
           placeholder="Enter city"
-          className="px-5 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 text-gray-700 w-64 shadow-sm"
+          className="px-5 py-3 w-full rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-700 placeholder-gray-400 shadow-lg transition-transform duration-300 ease-in-out transform focus:scale-105"
         />
         <button
           onClick={fetchWeather}
-          className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition shadow-md"
+          className="bg-blue-700 text-white px-6 py-3 rounded-lg hover:bg-blue-800 transition duration-300 shadow-lg transform hover:scale-105"
         >
           Search
         </button>
       </div>
 
-      {weather && <Weather data={weather} />}
+      {weather && (
+  <Weather key={weather.name} data={weather} />
+)}
+
     </div>
   );
 }
