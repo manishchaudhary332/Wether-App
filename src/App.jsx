@@ -1,21 +1,35 @@
 import { useState } from "react";
-import Weather from "./Weather";
+import Weather from "./Weather"; // Weather component ka import
 import "animate.css";
 
 function App() {
   const [city, setCity] = useState("");
   const [weather, setWeather] = useState(null);
+  const [error, setError] = useState(""); // 🔥 New state for error
 
   const API_KEY = "59871b6454f8280eae99988bea614fa3";
 
   const fetchWeather = async () => {
     if (city.trim() === "") return;
 
-    const res = await fetch(
-      `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=metric`
-    );
-    const data = await res.json();
-    setWeather(data);
+    try {
+      const res = await fetch(
+        `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=metric`
+      );
+
+      const data = await res.json();
+
+      if (res.ok) {
+        setWeather(data);
+        setError(""); // ✅ Clear error if successful
+      } else {
+        setWeather(null);
+        setError(data.message || "City not found."); // 🔥 Show API error message
+      }
+    } catch (err) {
+      setWeather(null);
+      setError("Something went wrong."); // 🔥 General error
+    }
   };
 
   return (
@@ -40,10 +54,15 @@ function App() {
         </button>
       </div>
 
-      {weather && (
-  <Weather key={weather.name} data={weather} />
-)}
+      {error && (
+        <div className="bg-red-100 text-red-700 px-6 py-4 rounded-lg shadow-md mb-6 animate__animated animate__fadeIn">
+          {error}
+        </div>
+      )}
 
+      {weather && (
+        <Weather key={weather.name + Date.now()} data={weather} />
+      )}
     </div>
   );
 }
